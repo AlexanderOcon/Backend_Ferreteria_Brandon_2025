@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import {obtenerUsuario} from '../controllers/usuario.controller.js';
+import {obtenerUsuarios, obtenerUsuario} from '../controllers/usuario.controller.js';
 
 const router = Router();
 
 // Obtener todas las categorías
-router.get('/usuario', obtenerUsuario);
+router.get('/usuarios', obtenerUsuarios);
+
+// Obtener un usuario por ID
+router.get('/usuario/:id_usuario', obtenerUsuario);
 
 export default router;
