@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {obtenerEmpleados,obtenerempleado} from '../controllers/empleado.controller.js';
+import {obtenerEmpleados,obtenerempleado, registrarEmpelado} from '../controllers/empleado.controller.js';
 
 const router = Router();
 
@@ -8,5 +8,7 @@ router.get('/empleados', obtenerEmpleados);
 
 // Obtener un empleado por ID
 router.get('/empleado/:id_empleado', obtenerempleado);
+
+router.post('/registrarempleado', registrarEmpelado);
 
 export default router;

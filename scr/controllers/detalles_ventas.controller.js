@@ -30,3 +30,22 @@ export const obtenerDetalles_Venta = async (req, res) => {
     });
   }
 };
+
+export const registrarDetallesVentas = async (req, res) => {
+  try {
+    const { id_venta, id_producto, cantidad, precio_unitario } = req.body;
+    const [result] = await pool.query(
+      "INSERT INTO Detalles_Ventas (id_venta, id_producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)", 
+      [id_venta, 
+      id_producto, 
+      cantidad, 
+      precio_unitario
+    ]);
+    res.status(201).json({ id_detalle_venta: result.insertId });
+  } catch (error) {
+    return res.status(500).json({
+      mensaje: "Ha ocurrido un error al registrar la categoría.",
+      error: error,
+    });
+  }
+};
