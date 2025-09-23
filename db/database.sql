@@ -62,6 +62,7 @@ CREATE TABLE Compras (
 );
 
 -- Tabla Detalles_Compras: detalla los productos adquiridos en cada compra
+
 CREATE TABLE Detalles_Compras (
     id_detalle_compra INT AUTO_INCREMENT PRIMARY KEY,
     id_compra INT,
@@ -92,60 +93,37 @@ CREATE TABLE Detalles_Ventas (
 
 -- Relación Productos -> Categorias
 ALTER TABLE Productos
-ADD CONSTRAINT fk_categoria_producto FOREIGN KEY (id_categoria) REFERENCES Categorias (id_categoria);
+ADD CONSTRAINT FK_Productos_Categorias 
+FOREIGN KEY (id_categoria) REFERENCES Categorias (id_categoria);
 
--- Relación Compras -> Empleados
+-- Relacion Compras -> Empleados
 ALTER TABLE Compras
-ADD CONSTRAINT fk_empleado_compra FOREIGN KEY (id_empleado) REFERENCES Empleados (id_empleado);
+ADD CONSTRAINT FK_Compras_Empleados 
+FOREIGN KEY (id_empleado) REFERENCES Empleados (id_empleado);
 
--- Relación Ventas -> Clientes
+-- Relacion Ventas -> Clientes
 ALTER TABLE Ventas
-ADD CONSTRAINT fk_cliente_venta FOREIGN KEY (id_cliente) REFERENCES Clientes (id_cliente);
+ADD CONSTRAINT FK_Ventas_Clientes 
+FOREIGN KEY (id_cliente) REFERENCES Clientes (id_cliente);
 
--- Relación Ventas -> Empleados
+-- Relacion Ventas -> Empleados
 ALTER TABLE Ventas
-ADD CONSTRAINT fk_empleado_venta FOREIGN KEY (id_empleado) REFERENCES Empleados (id_empleado);
+ADD CONSTRAINT FK_Ventas_Empleados 
+FOREIGN KEY (id_empleado) REFERENCES Empleados (id_empleado);
 
--- Configuración de fecha_venta por defecto
-ALTER TABLE Ventas
-MODIFY COLUMN fecha_venta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
-
--- Relación Detalles_Compras -> Compras y Productos
+-- Relacion Detalles_Compras -> Compras y Productos
 ALTER TABLE Detalles_Compras
-ADD CONSTRAINT fk_compra_detalle FOREIGN KEY (id_compra) REFERENCES Compras (id_compra),
-ADD CONSTRAINT fk_producto_compra FOREIGN KEY (id_producto) REFERENCES Productos (id_producto);
+ADD CONSTRAINT FK_Compras_Detalles_Compras FOREIGN KEY (id_compra)
+REFERENCES Compras (id_compra) ON DELETE CASCADE,
+ADD CONSTRAINT FK_Productos_Detalles_Compras
+FOREIGN KEY (id_producto) REFERENCES Productos (id_producto);
 
--- Relación Detalles_Ventas -> Ventas y Productos
+-- Relacion Detalles_Ventas -> Ventas y Productos
 ALTER TABLE Detalles_Ventas
-ADD CONSTRAINT fk_venta_detalle FOREIGN KEY (id_venta) REFERENCES Ventas (id_venta),
-ADD CONSTRAINT fk_producto_venta FOREIGN KEY (id_producto) REFERENCES Productos (id_producto);
-
---Eliminar la clave foránea actual fk_venta_detalle:
-
-USE ferreteria_bd;
-
-ALTER TABLE Detalles_Ventas
-DROP FOREIGN KEY fk_venta_detalle;
-
-
--- Volver a crear la clave foránea con ON DELETE CASCADE para fk_venta_detalle:
-
-ALTER TABLE Detalles_Ventas
-ADD CONSTRAINT fk_venta_detalle FOREIGN KEY (id_venta) REFERENCES Ventas (id_venta) ON DELETE CASCADE;
-
-
---Eliminar la clave foránea actual fk_compra_detalle:
-
-USE ferreteria_bd;
-
-ALTER TABLE Detalles_Compras
-DROP FOREIGN KEY fk_compra_detalle;
-
-
--- Volver a crear la clave foránea con ON DELETE CASCADE para fk_venta_detalle:
-
-ALTER TABLE Detalles_Compras
-ADD CONSTRAINT fk_compra_detalle FOREIGN KEY (id_compra) REFERENCES Compras (id_compra) ON DELETE CASCADE;
+ADD CONSTRAINT FK_Ventas_Detalles_Ventas
+FOREIGN KEY (id_venta) REFERENCES Ventas (id_venta) ON DELETE CASCADE,
+ADD CONSTRAINT FK_Productos_Detalles_Ventas
+FOREIGN KEY (id_producto) REFERENCES Productos (id_producto);
 
 
 -- Inserciones lógicas secuenciales

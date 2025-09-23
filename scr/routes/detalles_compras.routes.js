@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {obtenerDetalles_Compras,obtenerDetalles_Compra, registrarDetallesCompras} from '../controllers/detalles_compras.controller.js';
+import {obtenerDetalles_Compras,obtenerDetalles_Compra, registrarDetallesCompras,eliminarDetalleCompra} from '../controllers/detalles_compras.controller.js';
 
 const router = Router();
 
@@ -10,5 +10,7 @@ router.get('/detallescompras', obtenerDetalles_Compras);
 router.get('/detallescompra/:id_compra', obtenerDetalles_Compra);
 
 router.post('/registrardetallescompra', registrarDetallesCompras);
+
+router.delete('/eliminardetallecompra/:id_detalle_compra', eliminarDetalleCompra);
 
 export default router;
