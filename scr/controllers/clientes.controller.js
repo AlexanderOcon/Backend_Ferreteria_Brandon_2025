@@ -1,5 +1,5 @@
 import { pool } from "../../db_connection.js";
-// Obtener todas las categorías
+// Obtener todos los clientes
 export const obtenerClientes = async (req, res) => {
   try {
     const [result] = await pool.query("SELECT * FROM clientes");
@@ -63,7 +63,7 @@ export const eliminarCliente = async (req, res) => {
 
     if (result.affectedRows === 0) {
       return res.status(404).json({
-        mensaje: `Error al eliminar la categoría. El ID ${id_cliente} no fue encontrado.`
+        mensaje: `Error al eliminar el cliente. El ID ${id_cliente} no fue encontrado.`
       });
     }
 
@@ -71,7 +71,7 @@ export const eliminarCliente = async (req, res) => {
     res.status(204).send();
   } catch (error) {
     return res.status(500).json({
-      mensaje: 'Ha ocurrido un error al eliminar la categoría.',
+      mensaje: 'Ha ocurrido un error al eliminar el cliente.',
       error: error
     });
   }
