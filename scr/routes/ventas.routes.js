@@ -15,6 +15,6 @@ router.post('/registrarVenta', registrarVenta);
 router.delete('/eliminarVenta/:id_venta', eliminarVenta);
 
 // Actualizar parcialmente una categoría por su ID
-router.patch('/actualizarVenta/:id_venta', actualizarVentaPatch);
+router.patch('/actualizarventa/:id_venta', actualizarVentaPatch);
 
 export default router;
