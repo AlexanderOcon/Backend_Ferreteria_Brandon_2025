@@ -1,13 +1,14 @@
-import { pool } from "../../db_connection.js";
+import { supabase } from "../../supabase_client.js";
 // Obtener todas las categorías
 export const obtenerEmpleados = async (req, res) => {
   try {
-    const [result] = await pool.query("SELECT * FROM empleados");
-    res.json(result);
+    const { data, error } = await supabase.from('empleados').select('*');
+    if (error) throw error;
+    res.json(data);
   } catch (error) {
     return res.status(500).json({
-      mensaje: "Ha ocurrido un error al leer los Categorias.",
-      error: error,
+      mensaje: "Ha ocurrido un error al leer los empleados.",
+      error: error.message,
     });
   }
 };
@@ -15,17 +16,18 @@ export const obtenerEmpleados = async (req, res) => {
 export const obtenerempleado = async (req, res) => {
   try {
     const id_empleado = req.params.id_empleado;
-    const [result] = await pool.query("SELECT * FROM empleados WHERE id_empleado= ?",[id_empleado]
-    );
-    if (result.length <= 0) {
+    const { data, error } = await supabase.from('empleados').select('*').eq('id_empleado', id_empleado);
+    if (error) throw error;
+    if (!data || data.length === 0) {
       return res.status(404).json({
         mensaje: `Error al leer los datos. ID ${id_empleado} no encontrado.`,
       });
     }
-    res.json(result[0]);
+    res.json(data[0]);
   } catch (error) {
     return res.status(500).json({
       mensaje: "Ha ocurrido un error al leer los datos de los empleados.",
+      error: error.message,
     });
   }
 };
@@ -33,21 +35,21 @@ export const obtenerempleado = async (req, res) => {
 export const registrarEmpelado = async (req, res) => {
   try {
     const { primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, celular, cargo, fecha_contratacion} = req.body;
-    const [result] = await pool.query(
-      "INSERT INTO empleados (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, celular, cargo, fecha_contratacion) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-      [primer_nombre,
+    const { data, error } = await supabase.from('empleados').insert([{
+      primer_nombre,
       segundo_nombre,
       primer_apellido,
       segundo_apellido,
       celular,
       cargo,
       fecha_contratacion
-    ]);
-    res.status(201).json({ id_empleado: result.insertId });
+    }]).select();
+    if (error) throw error;
+    res.status(201).json({ id_empleado: data[0].id_empleado });
   } catch (error) {
     return res.status(500).json({
-      mensaje: "Ha ocurrido un error al registrar la categoría.",
-      error: error,
+      mensaje: "Ha ocurrido un error al registrar el empleado.",
+      error: error.message,
     });
   }
 };
@@ -55,23 +57,15 @@ export const registrarEmpelado = async (req, res) => {
 export const eliminarEmpleado = async (req, res) => {
   try {
     const id_empleado = req.params.id_empleado;
-    const [result] = await pool.query(
-      'DELETE FROM Empleados WHERE id_empleado = ?',
-      [id_empleado]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        mensaje: `Error al eliminar la categoría. El ID ${id_empleado} no fue encontrado.`
-      });
-    }
+    const { error } = await supabase.from('empleados').delete().eq('id_empleado', id_empleado);
+    if (error) throw error;
 
     // Respuesta sin contenido para indicar éxito
     res.status(204).send();
   } catch (error) {
     return res.status(500).json({
-      mensaje: 'Ha ocurrido un error al eliminar la categoría.',
-      error: error
+      mensaje: 'Ha ocurrido un error al eliminar el empleado.',
+      error: error.message
     });
   }
 };
@@ -81,24 +75,16 @@ export const actualizarEmpleadoPatch = async (req, res) => {
     const { id_empleado } = req.params;
     const datos = req.body;
 
-    const [result] = await pool.query(
-      "UPDATE Empleados SET ? WHERE id_empleado = ?",
-      [datos, id_empleado]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        mensaje: `Categoría con ID ${id_empleado} no encontrada.`,
-      });
-    }
+    const { error } = await supabase.from('empleados').update(datos).eq('id_empleado', id_empleado);
+    if (error) throw error;
 
     res.status(200).json({
-      mensaje: `Categoría con ID ${id_empleado} actualizada.`,
+      mensaje: `Empleado con ID ${id_empleado} actualizado.`,
     });
   } catch (error) {
     res.status(500).json({
-      mensaje: "Error al actualizar la categoría.",
-      error,
+      mensaje: "Error al actualizar el empleado.",
+      error: error.message,
     });
   }
 };

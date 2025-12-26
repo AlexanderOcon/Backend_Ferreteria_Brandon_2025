@@ -1,9 +1,9 @@
 {
-  "name": "backend-ferreteria-jose-2025",
+  "name": "backend-ferreteria-brandon-2025",
   "version": "1.0.0",
   "description": "Backend Ferreteria",
   "license": "ISC",
-  "author": "Jose Angel Amador",
+  "author": "Brandon Alexander Ocon",
   "type": "module",
   "engines": {
     "node": "22.x"
@@ -14,10 +14,10 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.89.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "mysql2": "^3.14.3",
     "react-select": "^5.10.2"
   }
 }
